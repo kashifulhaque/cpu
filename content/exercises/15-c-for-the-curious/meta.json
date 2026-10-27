@@ -1,0 +1,17 @@
+{
+  "id": "15-c-for-the-curious",
+  "title": "Write C, and predict how it lays out memory",
+  "brief": "Write small C functions with pointers and wraparound-safe arithmetic, and compute struct size and padding in Python to match what clang really does.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "A pointer plus an integer moves by whole elements: for a `const long *p`, `p + 1` is 8 bytes further on. `end - begin` counts elements, not bytes.",
+    "`swap` needs a temporary: `int t = *a; *a = *b; *b = t;`. That version also survives being called with the same pointer twice.",
+    "In a parameter list, `int a[10]` is really `int *a`. So `sizeof a` inside the function is the size of a pointer, 8, not 40.",
+    "To lay out a struct: for each field, round the running offset up to a multiple of the field's alignment, place the field there, and add its size. Finally round the total up to the largest alignment.",
+    "To round `x` up to a multiple of `a`, use `(x + a - 1) // a * a` in Python.",
+    "Sorting fields by alignment, largest first, leaves the least padding. Python's `sorted` with `reverse=True` and a `key` does it.",
+    "Signed overflow is undefined behaviour in C, but unsigned overflow wraps. Do the addition on `unsigned int` values and convert the result back to `int`."
+  ]
+}

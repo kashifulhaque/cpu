@@ -1,0 +1,16 @@
+{
+  "id": "23-generating-llvm-ir",
+  "title": "Write a code generator that emits LLVM IR",
+  "brief": "The lexer and parser are given. You write the code generator: expressions, comparisons, variables in allocas, print, if, and while, and run the programs with lli.",
+  "needs_gpu": false,
+  "timeout": 45,
+  "packages": [],
+  "hints": [
+    "Every variable lives in a stack slot named `%NAME.slot`, made by an `alloca i32` in the entry block. `let` and assignment are `store`, and reading a variable is `load`. Use em.temp() for each fresh result name.",
+    "gen_expr returns a string: an integer literal for Num, or a temp name such as `%t3`. A comparison is `icmp slt i32 A, B` giving an i1, followed by `zext i1 %t to i32` so that every language value is an i32.",
+    "gen_cond turns a value into a branch condition with `icmp ne i32 V, 0`. Zero is false and anything else is true.",
+    "An `if` needs three labels (then, else, end), and a `while` needs three (cond, body, end). Every block must end with a `br`. Write `br label %cond.N` to fall into a new block, then `em.start_block(\"cond.N\")`.",
+    "Make labels with em.label(\"if.then\"), which returns a unique name such as `if.then.2`. Call it once per label and keep the strings: you use each one in a `br` and again in its `start_block`.",
+    "generate: PRELUDE, then `define i32 @main() {`, an `entry:` block with one `alloca` and a `store i32 0` per variable from collect_vars, then the statements, then `ret i32 0` and `}`. Putting every alloca in entry keeps a loop from growing the stack."
+  ]
+}

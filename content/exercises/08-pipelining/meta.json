@@ -1,0 +1,17 @@
+{
+  "id": "08-pipelining",
+  "title": "Count cycles in a five-stage pipeline",
+  "brief": "Model IF, ID, EX, MEM, and WB, find read-after-write hazards, count stalls with and without forwarding, include the load-use bubble, and compute CPI.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "With n instructions and no stalls, the last one finishes in n + 4 cycles: the first needs 5, and each later one adds 1. For n = 0 the answer is 0.",
+    "find_raw: for consumer j and each source register, walk back from j - 1 to j - 2 and stop at the first instruction whose dest is that register. That nearest writer is the producer. Report (producer, consumer) once per pair.",
+    "Without forwarding, model each instruction by the cycle id[i] in which it is in ID. id[0] = 2. A consumer cannot leave ID before its producer's WB cycle, which is id[producer] + 3.",
+    "id[i] = max(id[i-1] + 1, id[p] + 3 for each producer p of a source of i). The stalls before instruction i are id[i] - (id[i-1] + 1). The producer p is the latest earlier instruction whose dest is that source.",
+    "With forwarding, only a load followed immediately by a user of its result stalls, for exactly one cycle. A load two instructions earlier is already forwarded. An ALU result never stalls.",
+    "Total cycles is 0 for an empty program, otherwise len(program) + 4 + sum(stalls). CPI is total cycles divided by instruction count.",
+    "The instruction x0 is not a dependency: `parse` already leaves x0 out of dest and srcs, so you never need to special-case it."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "04-logic-gates-and-adders",
+  "title": "Build an adder and a tiny ALU out of NAND gates",
+  "brief": "Build NOT, AND, OR, and XOR from NAND, then a half adder, full adder, ripple-carry adder, and an ALU with Z, N, C, and V flags.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "`nand(a, a)` is NOT a, because NAND of a bit with itself is 1 only when the bit is 0.",
+    "AND is NAND followed by NOT: `not_(nand(a, b))`. OR is NAND of the inverted inputs: `nand(not_(a), not_(b))`.",
+    "XOR needs four NANDs. Let `n = nand(a, b)`. Then XOR is `nand(nand(a, n), nand(b, n))`.",
+    "A half adder has sum = a XOR b and carry = a AND b. A full adder is two half adders, plus an OR for the carries.",
+    "Bits are stored lowest first: `[1, 0, 1]` is 1 + 4 = 5. Walk the list from index 0 and pass the carry along as you go.",
+    "For subtraction, compute a + NOT(b) + 1: invert every bit of b and start the adder with a carry-in of 1.",
+    "Overflow (V) is set when both operands added have the same sign bit and the result has a different one. Z is set when every result bit is 0. N is the top bit of the result."
+  ]
+}

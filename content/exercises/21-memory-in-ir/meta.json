@@ -1,0 +1,16 @@
+{
+  "id": "21-memory-in-ir",
+  "title": "Memory in LLVM IR: alloca, getelementptr, and mem2reg",
+  "brief": "Count memory instructions, watch mem2reg remove them, then write IR that swaps through pointers, sums an array, reads a struct field, and keeps a variable in an alloca.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "In count_opcodes, skip everything outside a `define ... {` / `}` pair, skip label lines (they end with a colon), and take the first word after `%name = ` as the opcode. Lines without an equals sign, such as `store` and `ret`, start with the opcode.",
+    "mem2reg_report needs only three calls: cputools.c_to_ir(src, opt=\"-O0\"), cputools.run_opt(ir, \"mem2reg\"), and your count_opcodes, which you keep only for the four opcodes alloca, load, store, and phi.",
+    "swap_ir: load both values first, then store them crosswise. `%x = load i32, ptr %a` reads through a pointer; `store i32 %x, ptr %b` writes through one.",
+    "sum_array_ir: `getelementptr inbounds i32, ptr %a, i64 %i` is the address of element i. The index needs type i64, so `sext` the i32 loop counter, or count with an i64 from the start.",
+    "get_b_ir: the struct type is `%Point = type { i32, i64 }`. `getelementptr inbounds %Point, ptr %p, i32 0, i32 1` is the address of field 1. LLVM, not you, works out that it sits at byte offset 8.",
+    "local_sum_ir: make `%s` and `%i` with `alloca i32` in the entry block, store the starting values there, and in the loop load, add, and store back. No phi is allowed to appear: the alloca is the variable."
+  ]
+}

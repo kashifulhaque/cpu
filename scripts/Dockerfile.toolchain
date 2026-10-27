@@ -1,0 +1,7 @@
+# The runner's toolchain without the app, for checking exercises locally:
+#   docker build -t cpu-toolchain:local -f scripts/Dockerfile.toolchain scripts
+#   scripts/harness.sh check content/exercises/<id> content/exercises/<id>/solution.py
+FROM python:3.12-slim
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends clang llvm libc6-dev procps \
+    && rm -rf /var/lib/apt/lists/*

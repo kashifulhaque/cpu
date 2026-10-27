@@ -1,0 +1,17 @@
+{
+  "id": "06-instruction-encoding",
+  "title": "Assemble and disassemble RISC-V instructions",
+  "brief": "Pack register numbers and immediates into 32-bit RV32I words for add, addi, sub, lw, sw, beq, and jal, then decode them back to text.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "Every format is a shift-and-or: word = (funct7 << 25) | (rs2 << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | opcode. Each field must be masked to its width first.",
+    "Mask a negative immediate with `& 0xFFF` (or `& 0x1FFF`, `& 0x1FFFFF`) to get its two's complement bits. To decode, sign_extend(value, bits) subtracts 1 << bits when the top bit is set.",
+    "For S-type, imm[11:5] goes to bits 31:25 and imm[4:0] goes to bits 11:7. Decoding glues the two pieces back together.",
+    "B-type scatters the offset: bit 12 goes to word bit 31, bits 10:5 to 30:25, bits 4:1 to 11:8, and bit 11 to word bit 7. Bit 0 of the offset is never stored, because it is always 0.",
+    "J-type scatters imm[20|10:1|11|19:12] into word bits 31 to 12. Write each piece on its own line with a comment naming the bits.",
+    "assemble() needs two passes: the first records the address (4 * instruction index) of each label, the second encodes each line with offset = label_address - this_address.",
+    "disassemble_word picks the format from the low 7 bits (opcode), then from funct3 and funct7 for the exact instruction. Print immediates as signed decimal numbers."
+  ]
+}

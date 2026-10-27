@@ -1,0 +1,16 @@
+{
+  "id": "16-how-a-compiler-sees-c",
+  "title": "Read compiler output and beat it by hand",
+  "brief": "Write predicates over clang's assembly (loops, lea, memory traffic), compare -O0 with -O2, and hand-write a function that matches a C one.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "An instruction line is what is left after you strip comments (everything from # on) and whitespace, and drop labels (they end with a colon) and directives (they start with a dot).",
+    "The mnemonic is the first word of an instruction line. Compare it with lowercase text, because clang writes mnemonics in lowercase.",
+    "A loop in assembly is a jump that goes backward: the jump's target label appears earlier in the text than the jump. Record each label's line number, then check each jump.",
+    "Jump mnemonics start with j (jmp, jle, jne, ...). The target is the last word of the line.",
+    "For multiply by 5, `lea eax, [rdi + 4*rdi]` computes rdi + 4*rdi = 5*rdi. A regular expression with a back-reference, `(\\w+)\\s*\\+\\s*4\\*\\1`, matches the same register twice.",
+    "In score_asm, a*5 is one lea and b*8 is a shift (or another lea with a scale of 8). Write the 32-bit result into eax so it wraps like a C int."
+  ]
+}

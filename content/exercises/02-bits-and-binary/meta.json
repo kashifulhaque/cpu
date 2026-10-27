@@ -1,0 +1,17 @@
+{
+  "id": "02-bits-and-binary",
+  "title": "Convert bases, pick bits apart, and pack bytes",
+  "brief": "Write binary and hex conversion loops, bit masks and shifts, popcount, and little- and big-endian packing into bytes.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "To write n in base b, repeat: `n % b` is the next digit (lowest first), then `n //= b`. Look the digit up in the string `\"0123456789abcdef\"`, collect the digits, and reverse them at the end. Handle 0 on its own.",
+    "To read a digit string in base b, start with `total = 0` and for each character do `total = total * b + digit`, where `digit = \"0123456789abcdef\".index(ch)`.",
+    "A mask of `n` ones is `(1 << n) - 1`. `get_bits(x, lo, hi)` shifts right by `lo`, then ANDs with a mask of `hi - lo + 1` ones.",
+    "`set_bit` sets with `value | (1 << index)` and clears with `value & ~(1 << index)`.",
+    "`popcount` can loop: add `value & 1`, then shift right by one, until the value is 0.",
+    "Byte number `i`, counting from the low end, is `(value >> (8 * i)) & 0xFF`. Little-endian stores byte 0 first. Big-endian stores the same bytes in the opposite order.",
+    "`unpack_le` adds `data[i] << (8 * i)` for each index. For big-endian, reverse the bytes first (`data[::-1]`) and reuse it."
+  ]
+}

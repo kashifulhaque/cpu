@@ -1,0 +1,16 @@
+{
+  "id": "25-performance-and-simd",
+  "title": "Find vectorized code, then write an SSE2 loop",
+  "brief": "Write a C array-add loop, detect packed vector instructions in clang's output at -O0, -O2, and -O3 -mavx2, then write the loop yourself in SSE2 assembly, four int32 at a time.",
+  "needs_gpu": false,
+  "timeout": 45,
+  "packages": [],
+  "hints": [
+    "add_arrays_c: `void add_arrays(int *dst, const int *a, const int *b, long n)` with a plain for loop over a long index. The same function must compile at every optimization level, so no pragmas are needed.",
+    "vector_width: for each line, drop everything after `#` or `;`, take the first word as the mnemonic, and test it against a regular expression for packed arithmetic: `v?(padd|psub|pmul)\\w*` or `v?(add|sub|mul|div)p[sd]`. The widest register named in a matching line (xmm 128, ymm 256, zmm 512) is the answer, and 0 when nothing matches.",
+    "asm_variants and compile_variants use the same three settings: key \"O0\" is opt=\"-O0\", key \"O2\" is opt=\"-O2\", and key \"O3_avx2\" is opt=\"-O3\" with flags=(\"-mavx2\",).",
+    "sse2_add_asm: the arguments arrive in rdi (dst), rsi (a), rdx (b), and rcx (n, 64 bits). Keep an index i in rax. While i + 4 <= n, do movdqu xmm0, [rsi + rax*4]; movdqu xmm1, [rdx + rax*4]; paddd xmm0, xmm1; movdqu [rdi + rax*4], xmm0; and add 4 to i.",
+    "After the vector loop, a second loop handles the 0 to 3 leftover elements one at a time with 32-bit registers (`mov r8d, [rsi + rax*4]`, `add r8d, [rdx + rax*4]`). A length of 0 must skip both loops. Use movdqu, not movdqa: the arrays are not 16-byte aligned.",
+    "time_variants: for each library, call add_arrays on arrays of n elements `repeats` times, keep the smallest elapsed time from time.perf_counter(), and return it as seconds. Leave the \"O3_avx2\" entry out when cpu_has_avx2() is False."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "14-functions-and-the-calling-convention",
+  "title": "Recursion, callbacks, and the System V calling convention",
+  "brief": "Write recursive factorial and Fibonacci, a function that calls a callback, and one that reads a stack argument, while keeping callee-saved registers and stack alignment correct.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "When a function is entered, rsp points at the return address, and rsp + 8 is a multiple of 16. After one `push` rsp is a multiple of 16, which is what a `call` needs.",
+    "Registers rbx, rbp, r12 to r15 are callee-saved: if you change one, `push` it first and `pop` it before `ret`. Pop in the reverse order of the pushes.",
+    "Anything you need after a `call` must live in a callee-saved register or on your stack. `rax`, `rcx`, `rdx`, `rsi`, `rdi`, and `r8` to `r11` can be overwritten by the function you call.",
+    "For factorial, handle the base case first and return early. Otherwise save n in rbx, call fact(n - 1), then `imul rax, rbx`.",
+    "To call a function pointer held in rbx, write `call rbx`. Put the callback's argument in rdi first.",
+    "The first six integer arguments travel in rdi, rsi, rdx, rcx, r8, r9. The seventh is on the stack. At entry it is at `[rsp + 8]`, just above the return address.",
+    "Keep the count of pushed 8-byte values in mind. Entry has 8 bytes below a 16-byte boundary. An odd number of pushes (or `sub rsp, 8` for padding) makes rsp a multiple of 16 at each `call`."
+  ]
+}

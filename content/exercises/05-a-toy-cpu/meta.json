@@ -1,0 +1,17 @@
+{
+  "id": "05-a-toy-cpu",
+  "title": "Build a toy CPU and program it",
+  "brief": "Write the fetch, decode, execute loop of a small register machine, then write programs for it that sum a list and compute a factorial.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "A program is a list of tuples such as `(\"ADD\", 0, 1)`. `self.program[self.pc]` is the fetch. The first item of the tuple is the opcode.",
+    "Advance `pc` right after the fetch, before you execute. A jump then just overwrites `pc` with its target.",
+    "Wrap every register write to a signed 32-bit number: `((x + 2**31) % 2**32) - 2**31`. Set the flags from the wrapped result, `zero = (result == 0)` and `negative = (result < 0)`, for ADD, SUB, and MUL only.",
+    "Raise `CPUError` for a pc outside the program, an unknown opcode, and a memory address outside `0 .. len(memory) - 1`. A negative index would silently wrap in Python, so test it yourself.",
+    "`run` calls `step` in a loop until `halted` is true, and counts steps. If the count reaches `max_steps`, raise `CPUError`.",
+    "For `sum_list_program`: keep a total, a pointer, and a counter in registers, plus registers holding 1 and 0. Test the counter for zero before the loop starts, so an empty list works.",
+    "For `factorial_program(n)`: multiply the accumulator by the counter, subtract one from the counter, and loop with `JZ` and `JMP` until the counter reaches 0."
+  ]
+}

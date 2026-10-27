@@ -1,0 +1,16 @@
+{
+  "id": "03-integers-and-overflow",
+  "title": "Wrap, negate, extend, and detect overflow",
+  "brief": "Write N-bit wrapping, two's complement negation, sign extension, and overflow detection, then compare your Python with what real C returns.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "Python's `%` returns a non-negative result for a positive modulus, so `x % (1 << bits)` wraps any int, negative ones included, into 0 .. 2**bits - 1.",
+    "`to_signed` starts from the unsigned pattern. If bit `bits - 1` is set, subtract `1 << bits`. Otherwise keep it.",
+    "Two's complement negation is flip every bit, then add one: `(~x + 1)`, then wrap with `to_unsigned`. Equivalent, and easier to check: `(-x) % 2**bits`.",
+    "An unsigned add overflows when the true sum `a + b` is larger than `2**bits - 1`. A signed add overflows when `to_signed(a) + to_signed(b)` falls outside -2**(bits-1) .. 2**(bits-1) - 1.",
+    "Zero extension changes nothing: a smaller pattern is already a valid larger one. Sign extension copies the top bit upward: convert to signed, then wrap into the wider width.",
+    "To read a pattern as signed in 8 bits, C says `(int8_t)x`. Your `to_signed(x, 8)` must give the same number."
+  ]
+}

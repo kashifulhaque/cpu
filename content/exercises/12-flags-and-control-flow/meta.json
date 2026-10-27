@@ -1,0 +1,16 @@
+{
+  "id": "12-flags-and-control-flow",
+  "title": "Branch and loop in x86-64 assembly",
+  "brief": "Write max, abs, clamp, a summing loop, and a bit-counting loop in assembly, and see signed and unsigned comparisons disagree.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "The first integer argument arrives in rdi (edi for 32 bits), the second in rsi, the third in rdx, and the result goes in rax.",
+    "`cmp a, b` computes a - b, throws the answer away, and keeps the flags. The instruction after it reads those flags: `jl`, `jg`, `jz`, `cmovl`, `setl`.",
+    "`cmovl eax, esi` copies esi into eax only when the last compare said signed less-than. It needs no jump and no label.",
+    "`setl al` writes only the low byte of rax. Clear the whole register first with `xor eax, eax`, and do it before the `cmp`, because `xor` changes the flags.",
+    "A loop is a label, a body, a `cmp`, and a conditional jump back to the label. Write local labels as `.Lloop` and `.Ldone` so they stay private.",
+    "Signed less-than is `l` (or `jl`, `setl`, `cmovl`). Unsigned less-than is `b`, for below (`jb`, `setb`, `cmovb`)."
+  ]
+}

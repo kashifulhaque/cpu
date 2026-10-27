@@ -1,0 +1,16 @@
+{
+  "id": "01-python-you-need",
+  "title": "Warm up with the Python this course uses",
+  "brief": "Write ten small functions and one tiny class: ints, strings, lists, dicts, hex, bytes, and a function that returns assembly text.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "Each function is short. If the body is longer than four lines, look for a simpler way.",
+    "An f-string puts values into text: `f\"Hello, {name}!\"` replaces `{name}` with the value of `name`.",
+    "`int(\"ff\", 16)` reads a hex string, and `hex(255)` gives `'0xff'`. `bin(5)` gives `'0b101'`, and `\"101\".zfill(8)` pads with zeros on the left.",
+    "`\"Hi\".encode(\"ascii\")` gives `b'Hi'`. Indexing or looping over a `bytes` value gives ints from 0 to 255. `f\"{x:02x}\"` formats an int as two lowercase hex digits.",
+    "For `word_counts`, loop over `text.lower().split()` and use `counts[word] = counts.get(word, 0) + 1`.",
+    "A triple-quoted f-string can span lines. Put `.globl {name}` on one line, `{name}:` on the next, then the two instructions, indented by four spaces."
+  ]
+}

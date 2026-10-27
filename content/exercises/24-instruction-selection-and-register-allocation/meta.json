@@ -1,0 +1,16 @@
+{
+  "id": "24-instruction-selection-and-register-allocation",
+  "title": "Liveness, graph coloring, and x86-64 code generation",
+  "brief": "Compute liveness for straight-line and looping code, build an interference graph, color it with K registers and spills, then emit x86-64 and run it.",
+  "needs_gpu": false,
+  "timeout": 45,
+  "packages": [],
+  "hints": [
+    "liveness: for instruction i, live_in[i] = uses(i) | (live_out[i] - {defs(i)}), and live_out[i] is the union of live_in[j] over successors(prog, i). Start every set empty and repeat the whole pass until no set changes. A loop needs several passes.",
+    "interference_graph: every variable is a key, even one with no edges. For each instruction that defines d, add an edge between d and every other name in live_out[i]. Then add edges between every pair of parameters: they all arrive at entry together, used or not.",
+    "color_graph (simplify, then select): repeatedly pick the node with the smallest degree below k (ties by name), or when none exists the node of highest degree (ties by name), push it on a stack, and remove it from a working copy of the graph. Then pop the stack: give each node the lowest color no already-colored neighbour uses, or put it in `spilled` if all k colors are taken.",
+    "allocate: map color c to REGS[c]. Give each spilled name its own slot number 0, 1, 2, in sorted order of name.",
+    "emit_x86: write a helper loc(name) that returns the register or `qword ptr [rsp + 8*slot]`. Compute every instruction through rax: `mov rax, loc(a)`, then `add rax, loc(b)`, then `mov loc(d), rax`. Use `imul` for mul. Moving from memory to memory is not allowed, which is why rax sits in the middle.",
+    "For jnz use `cmp loc(a), 0` then `jne .Lname`. For a label write `.Lname:`. For ret, `mov rax, loc(a)`, give back the stack with `add rsp, 8*nslots` if you took any, and `ret`. The two parameters arrive in rdi and rsi; move them to their homes first."
+  ]
+}

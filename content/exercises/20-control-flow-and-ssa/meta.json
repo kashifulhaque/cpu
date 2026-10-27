@@ -1,0 +1,18 @@
+{
+  "id": "20-control-flow-and-ssa",
+  "title": "Branches, loops, and phi in LLVM IR",
+  "brief": "Write max, abs, sum, factorial, and gcd in IR with br and phi, then build a control-flow graph from IR text and check every phi.",
+  "needs_gpu": false,
+  "timeout": 40,
+  "packages": [],
+  "hints": [
+    "A block is a label, some instructions, and exactly one terminator (`br` or `ret`). Falling off the end of a block into the next one is not allowed.",
+    "`phi` must be the first instruction in its block, and it lists one `[ value, %predecessor ]` pair per incoming edge: `%r = phi i32 [ %a, %then ], [ %b, %else ]`.",
+    "A loop needs a block (call it loop) with a phi for each variable that changes: `%i = phi i64 [ 1, %entry ], [ %i.next, %body ]`. The second pair uses a value defined later in the text, which is allowed for a phi.",
+    "Keep the loop test in the loop block, and branch out with `br i1 %done, label %exit, label %body`. The body ends with `br label %loop`.",
+    "For gcd, the loop's phis are a and b. The next pair is (b, a srem b). Exit when b is 0 and return a.",
+    "build_cfg: scan lines between `define` and `}`. A line ending in a colon (after you cut the `;` comment) starts a block. A line starting with `br`, `ret`, `switch`, or `unreachable` is the terminator, and every `label %name` on it is a successor.",
+    "Build succs first, then fill each block's preds by walking all the succs. Keep each list free of duplicates and in order of first appearance.",
+    "A back edge goes to a block that is still on the depth-first search stack. Keep a `visiting` set while you recurse."
+  ]
+}

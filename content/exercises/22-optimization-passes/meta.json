@@ -1,0 +1,16 @@
+{
+  "id": "22-optimization-passes",
+  "title": "Write optimization passes, then compare with LLVM",
+  "brief": "Implement constant folding, algebraic simplification, copy propagation, and dead-code elimination over a small three-address IR, then count instructions with LLVM's passes on the same function.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "Every pass returns a new Function. Instr and Function are frozen, so build a list of new Instr objects and return Function(func.name, func.params, tuple(new_body)).",
+    "fold_constants keeps a dict of names known to be constants. For each instruction, replace known names in its args by their ints first. If an op in BINARY_OPS then has two int args, the result is Instr(\"const\", dest, (eval_op(op, a, b),)).",
+    "simplify_algebra: write one small function that takes an instruction and returns the replacement. Check the cases in the order the docstring lists them, and leave an instruction with two int operands alone.",
+    "For x * 2**k, k is `b.bit_length() - 1`, and b is a power of two when `b > 1 and b & (b - 1) == 0`.",
+    "eliminate_dead_code walks the body backwards, keeping a set of names still needed. `ret` seeds the set. An instruction whose dest is not in the set is dropped; one that stays adds its name arguments to the set.",
+    "optimize runs the four passes in a loop until a whole round leaves the function unchanged. Instr and Function are dataclasses, so `new == old` compares them by value."
+  ]
+}

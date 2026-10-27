@@ -1,0 +1,16 @@
+{
+  "id": "13-memory-and-arrays-in-assembly",
+  "title": "Pointers and arrays in assembly",
+  "brief": "Index, sum, search, reverse, and copy memory in assembly using [base + index*scale] addressing, on arrays handed over from Python.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "A pointer argument arrives in a 64-bit register such as rdi. `[rdi]` is the 8 bytes it points to, and `[rdi + rsi*8]` is element rsi of an array of 8-byte values.",
+    "The scale in `[base + index*scale]` must be 1, 2, 4, or 8, so it matches the element size: 1 for bytes, 4 for int32, 8 for int64.",
+    "Use `movsxd rdx, dword ptr [rdi + rcx*4]` to load an int32 and sign-extend it to 64 bits in one step. A plain 32-bit load would zero-extend.",
+    "A size argument such as n is unsigned, so compare an index against it with `jae` (jump if above or equal), not `jge`.",
+    "For `strlen`, compare a byte against zero with `cmp byte ptr [rdi + rax], 0`. A string ends at the first zero byte.",
+    "If the checks report a crash with SIGSEGV, an address is wrong. Check your scale, and check that a loop stops when the index reaches n, not n + 1."
+  ]
+}

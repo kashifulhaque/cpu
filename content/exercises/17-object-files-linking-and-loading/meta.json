@@ -1,0 +1,16 @@
+{
+  "id": "17-object-files-linking-and-loading",
+  "title": "Parse ELF object files and write a toy linker",
+  "brief": "Read the ELF64 header, section headers, symbols, and relocations with struct, then link two object files by patching call targets.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "The ELF64 header is 64 bytes. struct.unpack_from('<16sHHIQQQIHHHHHH', data, 0) reads all 14 fields at once; e_shoff is the 7th value and e_shnum is the 13th.",
+    "Each section header is 64 bytes: struct format '<IIQQQQIIQQ' gives name, type, flags, addr, offset, size, link, info, addralign, entsize. The name is an offset into the section whose index is e_shstrndx.",
+    "A name in a string table is the bytes from that offset up to the next zero byte. data.index(b'\\0', start) finds it.",
+    "A symbol-table entry is 24 bytes, '<IBBHQQ': name, info, other, shndx, value, size. The binding is info >> 4 and the type is info & 15. The first entry is a null symbol; skip it.",
+    "A relocation entry is 24 bytes, '<QQq': offset, info, addend. The symbol index is info >> 32 and the type is info & 0xffffffff. The relocation section's link field names its symbol table, and its info field names the section being patched.",
+    "To patch, write S + A - P as a signed 32-bit little-endian value at the relocation offset, where S is the symbol's final address, A is the addend, and P is the final address of the bytes being patched."
+  ]
+}

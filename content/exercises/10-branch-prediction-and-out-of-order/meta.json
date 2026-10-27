@@ -1,0 +1,17 @@
+{
+  "id": "10-branch-prediction-and-out-of-order",
+  "title": "Predict branches and schedule out of order",
+  "brief": "Build static, 1-bit, 2-bit, and gshare branch predictors, measure them on loop and random traces, and compare in-order and out-of-order finish times.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "Every predictor has predict(pc) -> bool and update(pc, taken). run_predictor asks for a prediction first, then updates, for every (pc, taken) pair, and counts the correct predictions.",
+    "OneBitPredictor keeps a list `table` of booleans, all False at the start, indexed by pc % table_size. update stores the last outcome.",
+    "TwoBitPredictor keeps counters 0..3, all starting at 1. predict is counter >= 2. update adds 1 on taken and subtracts 1 on not taken, clamped to 0..3 (saturating).",
+    "Gshare uses the same 2-bit counters, but the index is (pc ^ history) & (table_size - 1). history holds the last `index_bits` outcomes: after each branch, history = ((history << 1) | taken) & mask.",
+    "In gshare, read the prediction with the history from before the branch and update the counter at that same index. Only then shift the outcome into history.",
+    "ooo_time: op i starts when all its dependencies have finished: start = max(finish[d] for d in deps), or 0 with no deps. finish = start + latency. The answer is the largest finish.",
+    "in_order_time is the same, except an op may not start before the previous op started plus 1: start = max(previous start + 1, dependency finishes)."
+  ]
+}

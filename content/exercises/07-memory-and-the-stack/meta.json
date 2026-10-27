@@ -1,0 +1,18 @@
+{
+  "id": "07-memory-and-the-stack",
+  "title": "Build a little-endian memory and a downward-growing stack",
+  "brief": "Store and load 1, 2, 4, and 8-byte values as little-endian bytes, check alignment, push and pop a stack, trace a recursive call, and see x86-64 do the same.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "Python can do the byte splitting for you: value.to_bytes(size, 'little') and int.from_bytes(b, 'little', signed=...). The exercise asks you to write the loop yourself in to_le_bytes: byte k is (value >> (8 * k)) & 0xFF.",
+    "To store a value too big for its size, mask it first: value & ((1 << (8 * size)) - 1). That is how a 4-byte store of -1 becomes ff ff ff ff.",
+    "An access is in range when 0 <= addr and addr + size <= len(data). Check before you touch the bytearray, because Python happily accepts negative indexes.",
+    "An address is aligned for a size when addr % size == 0. Only enforce it when the memory was built with strict_align=True.",
+    "push: sp -= 8, then store at sp. pop: load at sp, then sp += 8. Raise StackError on a pop when the stack is empty (sp == top).",
+    "call(return_address) is a push of the return address; ret() is a pop that returns it.",
+    "In factorial_with_stack each frame is two pushes: the return address, then k. Unwind by popping k first, then calling ret().",
+    "For x86_immediate_bytes, assemble `mov eax, <value>` with cputools.machine_code and slice off the first byte (the opcode 0xB8)."
+  ]
+}

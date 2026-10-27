@@ -1,0 +1,17 @@
+{
+  "id": "09-caches",
+  "title": "Simulate a set-associative cache",
+  "brief": "Split addresses into tag, index, and offset, build an LRU set-associative cache, compare row-major and column-major walks, and time a real strided C loop.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "offset = addr % block_size, block = addr // block_size, index = block % num_sets, tag = block // num_sets. With powers of two these are shifts and masks, but // and % are fine.",
+    "num_sets = size // (block_size * ways). Raise ValueError unless size, block_size, and ways are positive powers of two and num_sets is at least 1.",
+    "Keep one list per set, ordered from least to most recently used. On a hit, move the tag to the end. On a miss, if the set already holds `ways` tags, remove the first one, then append the new tag.",
+    "A direct-mapped cache is ways=1. A fully associative cache is one set: size == block_size * ways.",
+    "matrix_addresses: element (r, c) of a row-major array lives at base + (r * cols + c) * elem_size. Row-major order loops r outside and c inside; column-major swaps the loops but keeps the address formula.",
+    "The C loop is idx = 0; repeat iters times: sum += a[idx]; idx = (idx + stride) & mask. Return the sum as a long. Use `long` for sum and idx so nothing overflows an int.",
+    "amat = hit_time + miss_rate * miss_penalty."
+  ]
+}

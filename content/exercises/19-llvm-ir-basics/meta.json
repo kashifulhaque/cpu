@@ -1,0 +1,17 @@
+{
+  "id": "19-llvm-ir-basics",
+  "title": "Write LLVM IR by hand",
+  "brief": "Write add, mul, sdiv, icmp, zext, sext, and trunc in typed LLVM IR, verify it, run it, and list an IR function's opcodes in Python.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "A function looks like `define i32 @add3(i32 %a, i32 %b, i32 %c) {` then an `entry:` label, instructions, and `}`. Every instruction that makes a value starts with `%name =`.",
+    "Both operands of an instruction must have the same type: `add i32 %a, %b`. Convert first with `sext` (widen, keeping the sign) or `trunc` (narrow).",
+    "`icmp slt i32 %x, 0` produces an `i1`. A function that returns an `i32` needs `zext i1 %c to i32` to turn the true/false bit into 1 or 0.",
+    "Signed low byte: `trunc i32 %x to i8` keeps the low 8 bits, then `sext i8 %t to i32` widens them again with the sign bit copied.",
+    "To average without overflow, widen both numbers to i64 with `sext`, add, `sdiv i64 %s, 2`, then `trunc` back to i32. `sdiv` truncates toward zero, like C.",
+    "For ir_opcodes, only look at lines between `define ... {` and `}`. Skip labels (they end with a colon) and cut off comments (from `;`). The opcode is the first word, or the word after `=`.",
+    "If the verifier rejects your IR, the check shows its message: it names the line and column, and says what type it expected."
+  ]
+}

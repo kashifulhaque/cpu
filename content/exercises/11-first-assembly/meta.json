@@ -1,0 +1,16 @@
+{
+  "id": "11-first-assembly",
+  "title": "Write your first x86-64 functions",
+  "brief": "Return a constant, add two numbers, use lea and imul, shift, and zero- or sign-extend, all in Intel-syntax assembly called from Python.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "The first integer argument arrives in rdi (edi for the low 32 bits), the second in rsi (esi), and the result goes in rax (eax). End every function with `ret`.",
+    "Each function needs a `.globl name` line and a `name:` label, and the name must match the one in the docstring.",
+    "Writing to a 32-bit register such as eax clears the upper 32 bits of rax. That is how `mov eax, edi` keeps only the low 32 bits of a value.",
+    "`lea rax, [rsi + rdi*4]` computes rsi + rdi*4 in one instruction and touches no memory. Scale factors can be 1, 2, 4, or 8.",
+    "`imul rax, rdi, 7` multiplies rdi by the constant 7 into rax. `shl` shifts left, `shr` shifts right filling with zeros, and `sar` shifts right copying the sign bit.",
+    "`movsxd rax, edi` sign-extends a 32-bit value into a 64-bit register. The upper half of rdi is not guaranteed to hold anything useful when the argument is a 32-bit int."
+  ]
+}

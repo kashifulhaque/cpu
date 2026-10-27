@@ -1,0 +1,17 @@
+{
+  "id": "18-what-a-compiler-is",
+  "title": "Write a lexer, a parser, and an interpreter",
+  "brief": "Turn text like `let x = 4 in x * (x + 1)` into tokens, then an AST with the right precedence, then evaluate it.",
+  "needs_gpu": false,
+  "timeout": 30,
+  "packages": [],
+  "hints": [
+    "Walk the string with an index. Skip spaces. A digit starts a number: keep going while the next character is a digit. A letter or underscore starts a name: keep going while the next character is a letter, digit, or underscore.",
+    "After you read a name, check whether it is `let` or `in`. If so, give the token kind \"kw\" instead of \"name\".",
+    "Write one method per grammar rule: parse_expr, parse_sum, parse_term, parse_unary, parse_atom. Each one calls the rule below it, so `*` binds tighter than `+` without any extra work.",
+    "For left associativity, use a loop, not recursion: parse one term, then while the next token is + or -, parse another term and wrap both in a BinOp. The result leans left.",
+    "Parse -x as BinOp(\"-\", Num(0), x). The unary rule calls itself, so --3 works.",
+    "After parse_expr returns, the next token must be \"eof\". If it is not, raise ParseError: something like `1 2` or `(1` is left over.",
+    "Division in the interpreter truncates toward zero, like C. Python's // rounds down, so use int(a / b) only for small numbers, or compute the sign yourself: q = abs(a) // abs(b), negated when the signs differ."
+  ]
+}
