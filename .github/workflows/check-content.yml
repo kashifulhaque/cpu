@@ -29,6 +29,20 @@ jobs:
       - name: Validate every lesson and exercise
         run: python scripts/check_content.py
 
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r backend/requirements.txt pyyaml
+
+      - name: Run the backend unit tests
+        run: python -m unittest discover -s backend/tests -t .
+
   frontend:
     runs-on: ubuntu-latest
     steps:

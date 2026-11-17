@@ -3,6 +3,7 @@ import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import Mark from "./components/Mark";
 import Sidebar from "./components/Sidebar";
+import AgentsPage from "./pages/AgentsPage";
 import Dashboard from "./pages/Dashboard";
 import LessonPage from "./pages/LessonPage";
 import { api, type Part, type ProgressMap } from "./lib/api";
@@ -162,6 +163,7 @@ export default function App() {
                 <LessonPage lessons={lessons} onProgress={refresh} />
               }
             />
+            <Route path="/agents" element={<AgentsPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
@@ -237,6 +239,15 @@ function AccountMenu({ username }: { username: string }) {
             </button>
           ))}
           <div className="my-1 border-t border-rule" />
+          <Link
+            to="/agents"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+            className="menu-item"
+          >
+            <span className="w-3" aria-hidden />
+            Agent access
+          </Link>
           <a
             href="https://auth.ifkash.dev/logout"
             role="menuitem"

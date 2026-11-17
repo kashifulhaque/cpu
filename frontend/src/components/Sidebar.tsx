@@ -240,6 +240,26 @@ export default function Sidebar({
               </p>
             )}
           </div>
+
+          <div className="border-t border-rule px-2 py-2">
+            <NavLink
+              to="/agents"
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex items-center gap-2 rounded-md px-2 py-2 text-[13px] leading-snug transition-colors lg:py-[5px] ${
+                  isActive
+                    ? "bg-raise font-medium text-ink shadow-[inset_0_0_0_1px_var(--rule)]"
+                    : "text-ink-2 hover:bg-[color-mix(in_oklab,var(--ink)_5%,transparent)] hover:text-ink"
+                }`
+              }
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden className="text-ink-4">
+                <circle cx="4.8" cy="7" r="2.4" stroke="currentColor" strokeWidth="1.3" />
+                <path d="M7.2 7h5.1M10.3 7v2M12.3 7v1.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+              </svg>
+              Agent access
+            </NavLink>
+          </div>
         </div>
       </nav>
     </>
